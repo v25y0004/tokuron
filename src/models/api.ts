@@ -8,7 +8,7 @@ import type {
 } from "./db";
 
 export type APICreateUser = DBCreateUser;
-export type APIUser = Omit<DBUser, "passwprd">;
+export type APIUser = Omit<DBUser, "password">;
 
 export type APICreateChat = DBCreateChat;
 export type APIChat = DBChat;

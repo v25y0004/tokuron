@@ -3,7 +3,7 @@ import type { ContextVariables } from "../constants";
 import { API_PREFIX } from "../constants";
 import { attachUserId, checkJWTAuth } from "../middlewares/auth";
 import type { DBCreateUser, DBUser } from "../models/db";
-import { SimpleInMemoryResource } from "../strorage/in_memory";
+import { SimpleInMemoryResource } from "../storage/in_memory";
 import { AUTH_PREFIX, createAuthApp } from "./auth";
 
 export function createMainApp(

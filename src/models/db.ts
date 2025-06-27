@@ -7,17 +7,24 @@ export interface DBEntity {
 }
 
 export interface DBUser extends DBEntity {
-    nema: string;
+    name: string;
     email: Email;
     password: string;
 }
 
 export interface DBChat extends DBEntity {
-    ownerID: DBUser["id"];
+    ownerId: DBUser["id"];
     name: string;
 }
 
+export type MessageType = "assistant" | "user";
 
-export type DBCreateUser = Pick<DBUser, "email" | "password" | "nema">;
-export type DBCreateChat = Pick<DBChat, "name" | "ownerID">;
-export type DBCreateMessage = Pick<DBMessage, "chatID" | "message" | "type">;
+export interface DBMessage extends DBEntity {
+    chatId: DBChat["id"];
+    type: MessageType;
+    message: string;
+}
+
+export type DBCreateUser = Pick<DBUser, "email" | "password" | "name">;
+export type DBCreateChat = Pick<DBChat, "name" | "ownerId">;
+export type DBCreateMessage = Pick<DBMessage, "chatId" | "message" | "type">;
