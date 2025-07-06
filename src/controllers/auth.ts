@@ -26,7 +26,6 @@ export function createAuthApp(
         const hashedPassword = await bcrypt.hash(password, salt);
         await userResource.create({ name, email, password: hashedPassword });
         return c.json({ success: true });
-        return c.json({ salt: salt, password: hashedPassword });
       });
 
       authApp.post(LOGIN_ROUTE, async (c) => {

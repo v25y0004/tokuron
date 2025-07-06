@@ -7,7 +7,6 @@ import type {
   DBMessage,
 } from "../models/db";
 import type { IDatabaseResource } from "../storage/types";
-import { findTargetHandler } from "hono/utils/handler";
 
 export const CHAT_PREFIX = "/chat/";
 const CHAT_ROUTE = "";
