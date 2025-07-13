@@ -2,17 +2,10 @@ import { Hono } from "hono";
 import type { ContextVariables } from "../constants";
 import { API_PREFIX } from "../constants";
 import { attachUserId, checkJWTAuth } from "../middlewares/auth";
-import type { 
-    DBCreateUser, 
-    DBUser,
-    DBChat,
-    DBCreateChat,
-    DBCreateMessage,
-    DBMessage
- } from "../models/db";
-import { SimpleInMemoryResource } from "../storage/in_memory";
-import { AUTH_PREFIX, createAuthApp } from "./auth";
+import { AUTH_PREFIX, authApp, createAuthApp } from "./auth";
 import { CHAT_PREFIX, createChatApp } from "./chat";
+import { env } from 'cloudflare:workers'
+import { UserSQLResource, ChatSQLResource, MessageSQLResource } from "../storage/sql";
 
 export function createMainApp(
     authApp: Hono<ContextVariables>,
@@ -28,12 +21,14 @@ export function createMainApp(
     return app;
 }
 
-export function createInMemoryApp() {
-    return createMainApp(
-        createAuthApp(new SimpleInMemoryResource<DBUser, DBCreateUser>()),
-        createChatApp(
-            new SimpleInMemoryResource<DBChat, DBCreateChat>(),
-            new SimpleInMemoryResource<DBMessage, DBCreateMessage>(),
-        )
-    );
+export function createSQLApp() {
+    const userRes = new UserSQLResource(env.DB);
+    const chatRes = new ChatSQLResource(env.DB);
+    const messageRes = new MessageSQLResource(env.DB);
+
+    const authAPP = createAuthApp(userRes);
+    const chatApp = createChatApp(chatRes, messageRes);
+
+    return createMainApp(authApp, chatApp);
 }
+
