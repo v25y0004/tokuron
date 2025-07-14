@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import type { ContextVariables } from "../constants";
 import { API_PREFIX } from "../constants";
 import { attachUserId, checkJWTAuth } from "../middlewares/auth";
-import { AUTH_PREFIX, authApp, createAuthApp } from "./auth";
+import { AUTH_PREFIX, createAuthApp } from "./auth";
 import { CHAT_PREFIX, createChatApp } from "./chat";
 import { env } from 'cloudflare:workers'
 import { UserSQLResource, ChatSQLResource, MessageSQLResource } from "../storage/sql";
@@ -26,7 +26,7 @@ export function createSQLApp() {
     const chatRes = new ChatSQLResource(env.DB);
     const messageRes = new MessageSQLResource(env.DB);
 
-    const authAPP = createAuthApp(userRes);
+    const authApp = createAuthApp(userRes);
     const chatApp = createChatApp(chatRes, messageRes);
 
     return createMainApp(authApp, chatApp);
