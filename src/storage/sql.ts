@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/d1';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, normalizeRelation } from 'drizzle-orm';
 import type { DBChat, DBCreateChat, DBMessage, DBCreateMessage, DBUser, DBCreateUser } from "../models/db";
 import type { IDatabaseResource } from "./types";
 import { chatTable, messageTable, userTable }  from "../schema";
@@ -61,6 +61,16 @@ export class UserSQLResource implements IDatabaseResource<DBUser, DBCreateUser> 
       const result = await query.get();
       return (result || null) as T;
     }
+  }
+
+  async get(id: string): Promise<DBUser | null> {
+    const result = await this.db
+    .select()
+    .from(userTable)
+    .where(eq(userTable.id, id))
+    .get();
+
+    return result as DBUser || null;
   }
 
   async update(id: string, data: Partial<DBUser>): Promise<DBUser | null> {
@@ -147,6 +157,16 @@ export class ChatSQLResource implements IDatabaseResource<DBChat, DBCreateChat> 
     }
   }
 
+  async get(id: string): Promise<DBChat | null> {
+    const result = await this.db
+    .select()
+    .from(chatTable)
+    .where(eq(chatTable.id, id))
+    .get();
+
+    return result as DBChat || null;
+  }
+
   async update(id: string, data: Partial<DBChat>): Promise<DBChat | null> {
     const updateData = Object.entries(data)
     .filter(([_, value]) => value !== undefined)
@@ -229,6 +249,16 @@ export class MessageSQLResource implements IDatabaseResource<DBMessage, DBCreate
       const result = await query.get();
       return (result || null) as T;
     }
+  }
+
+  async get(id: string): Promise<DBMessage | null> {
+    const result = await this.db
+    .select()
+    .from(messageTable)
+    .where(eq(messageTable.id, id))
+    .get();
+
+    return result as DBMessage || null;
   }
 
   async update(id: string, data: Partial<DBMessage>): Promise<DBMessage | null> {

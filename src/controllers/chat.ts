@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import type { ContextVariables } from "../constants";
+import { generateMessageResponse } from "../integrations/gpt";
 import type {
   DBChat,
   DBCreateChat,
@@ -52,8 +53,10 @@ export function createChatApp(
     const userMessage: DBCreateMessage = { message, chatId, type: "user" };
     await messageResource.create(userMessage);
 
+    const allMessage = await messageResource.findAll({ chatId });
+    const response = await generateMessageResponse(allMessage, c.env.GITHUB_TOKEN);
     const responseMessage: DBCreateMessage = {
-      message: "dummy response",
+      message: response,
       chatId,
       type: "assistant",
     };
