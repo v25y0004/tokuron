@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/d1';
-import { eq, and, normalizeRelation } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import type { DBChat, DBCreateChat, DBMessage, DBCreateMessage, DBUser, DBCreateUser } from "../models/db";
 import type { IDatabaseResource } from "./types";
 import { chatTable, messageTable, userTable }  from "../schema";
